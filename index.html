@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Анжела ❤️ // Эпические Пангоды: Ultimate Edition</title>
+    <meta name="robots" content="noindex, nofollow">  <!-- не показывать сайт в поисковиках -->
+    <link rel="stylesheet" href="css/style.css?v=2">
+    <link rel="stylesheet" href="css/interactive.css?v=2">
+</head>
+<body>
+
+    <!-- Вход по паролю (js/lock.js) — первым, чтобы не мелькала игра -->
+    <div id="lock-screen" style="position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; background: #0f0514;">
+        <div class="lock-box">
+            <div class="lock-icon">🔒</div>
+            <h2>Только для Анжелы</h2>
+            <p>Введи пароль, чтобы войти</p>
+            <input id="lock-input" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="пароль">
+            <div id="lock-error">Неверно 😿 Подсказка: где всё происходит? ❄️</div>
+            <button class="init-btn" onclick="tryUnlock()">Войти</button>
+        </div>
+    </div>
+    <script src="js/lock.js?v=2"></script>
+
+    <canvas id="bg-canvas"></canvas>
+    <div class="crt-overlay"></div>
+    <div id="toast-container"></div>
+
+    <!-- Плавающая кнопка пропуска печати (всегда под рукой на телефоне и ПК) -->
+    <button id="skip-btn" onclick="skipTyping()">Пропустить печать ⏩</button>
+
+    <!-- Телефон Анжелы: кнопка в игре и сам телефон (js/phone.js) -->
+    <button id="phone-btn" onclick="openPhone()" title="Телефон Анжелы">📱</button>
+    <div id="phone-overlay" onclick="if (event.target === this) closePhone()">
+        <div id="phone-device"><div id="phone-screen"></div></div>
+    </div>
+
+    <!-- Мини-игры (js/minigames.js) -->
+    <div id="minigame-overlay"></div>
+
+    <!-- Лайтбокс для зума картинок -->
+    <div id="lightbox-modal" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Увеличенная сцена">
+    </div>
+
+    <div id="init-screen">
+        <div class="init-box">
+            <img id="init-cover-img" class="init-cover" src="img/start_screen.jpg" alt="Обложка" onload="this.style.display='block'" onerror="this.style.display='none'">
+            <div class="init-badge">✨ Visual Novel // Ultimate Edition ✨</div>
+            <h1 style="color: var(--pink-primary); font-size: clamp(32px, 6vw, 54px); margin: 4px 0 8px 0; text-shadow: 3px 3px 0px var(--pink-soft); text-transform: uppercase;">Анжела ❤️</h1>
+            <h3 style="color: #b0106a; font-size: clamp(16px, 3vw, 22px); margin: 0 0 18px 0;">Глава 1: Эпические Пангоды · Глава 2: Скажи это вслух</h3>
+            <p style="font-size: 15.5px; color: #55445c; max-width: 540px; margin: 0 auto 14px auto; line-height: 1.55;">
+                Добро пожаловать в интерактивный абсурд Пангод. Музыка включится сама при старте. Нажимай на картинки, чтобы приблизить их, проверяй сумочку, заглядывай в телефон Анжелы 📱 и ищи все концовки: <b>6 в первой главе</b> и <b>5 во второй</b>. Тап по тексту — пропустить печать.
+            </p>
+            <button id="continue-btn" class="init-btn" onclick="continueGame()" style="display: none;">
+                ⏩ ПРОДОЛЖИТЬ<br><small id="continue-loc" class="continue-loc"></small>
+            </button>
+            <button id="start-btn" class="init-btn" onclick="startGame()">▶ НАЧАТЬ ИГРУ</button>
+            <br>
+            <button class="init-ch2-btn" onclick="startChapter2()">📖 Сразу к Главе 2: «Скажи это вслух»</button>
+            <br>
+            <button class="init-endings-btn" onclick="openPhone('endings')">📱 Концовки, ачивки и альбом: <span class="endings-count">0/6</span></button>
+        </div>
+    </div>
+
+    <div id="modal-backdrop" onclick="closeModals()"></div>
+    <div id="inventory-modal">
+        <h2>Сумочка Анжелы Ахметовой 👜</h2>
+        <ul id="inventory-list">
+            <li>🎸 <b>Электрогитара</b> <br><small>Оплачена на год за 1060 руб. в местном ДК. Идеальное оружие против нормисов и маразматиков. Струны звенят яростью.</small></li>
+            <li>💊 <b>Секретные белые капсулы</b> <br><small>Для внимания. Главное не перепутать с коричневыми для гемоглобина, а то раздует как шар, а мама опять будет орать и угрожать молотком.</small></li>
+            <li>📱 <b>Смартфон</b> <br><small>Слава богам, он еще жив и не разбит маминым молотком. ВК мессенджер тупит, переключая аккаунты по 30 минут, но в закрепленных чатах почему-то висит диалог с Сашей.</small></li>
+            <li>🚬 <b>Сигарета из пачки</b> <br><small>Найденная на грязном полу в подъезде. Почти докурена до фильтра, крепка как сука, горло дерет, но бесплатный лут есть лут.</small></li>
+        </ul>
+        <button class="close-inv-btn" onclick="toggleInventory()">Закрыть сумочку</button>
+    </div>
+
+    <div id="app">
+        <div id="game-container" style="display: none;">
+            <div class="header-status">
+                <div class="loc-badge">
+                    <span>📍</span>
+                    <span id="loc-display">ЛОКАЦИЯ: ???</span>
+                </div>
+                <div class="header-controls">
+                    <div id="love-meter" class="love-meter" style="display: none;" title="Симпатия Саши">
+                        <span>💗</span><span id="love-value">0</span>
+                    </div>
+                    <button id="audio-btn" class="header-btn" onclick="toggleAudio()">
+                        <span id="audio-icon">🔊</span>
+                        <span id="audio-text" class="btn-label-mobile-hide">ЗВУК</span>
+                    </button>
+                    <button class="header-btn" onclick="toggleInventory()">
+                        <span>👜</span>
+                        <span class="btn-label-mobile-hide">Сумочка</span>
+                        <span class="inv-count-badge" id="inv-count">4</span>
+                    </button>
+                </div>
+                <div id="reading-progress"></div>
+            </div>
+            
+            <div class="main-layout" id="main-scroll-container">
+                <div class="art-container" id="art">
+                    <div class="art-frame">
+                        <img id="scene-image" class="art-image" src="" alt="Сцена" style="display: none;" onclick="openLightbox(this.src)">
+                    </div>
+                    <div class="art-hint" id="art-zoom-hint">🔍 Нажми на фото для увеличения</div>
+                    <div id="art-placeholder" style="color: #ffb6c1; font-size: 18px; font-weight: bold; text-align: center; padding: 20px; display: none;"></div>
+                </div>
+                
+                <div class="content-area">
+                    <div class="text-box" id="text"></div>
+                    <div class="choices" id="choices"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/effects.js?v=2"></script>
+    <script src="js/state.js?v=2"></script>
+    <script src="js/items.js?v=2"></script>
+    <script src="js/scenes/01_school.js?v=2"></script>
+    <script src="js/scenes/02_roof.js?v=2"></script>
+    <script src="js/scenes/03_toilet.js?v=2"></script>
+    <script src="js/scenes/04_hall.js?v=2"></script>
+    <script src="js/scenes/05_street.js?v=2"></script>
+    <script src="js/scenes/06_base.js?v=2"></script>
+    <script src="js/scenes/07_garage.js?v=2"></script>
+    <script src="js/scenes/08_dk.js?v=2"></script>
+    <script src="js/scenes/ch2_00_common.js?v=2"></script>
+    <script src="js/scenes/ch2_01_morning.js?v=2"></script>
+    <script src="js/scenes/ch2_02_night_chat.js?v=2"></script>
+    <script src="js/scenes/ch2_03_school_sava.js?v=2"></script>
+    <script src="js/scenes/ch2_04_proposal.js?v=2"></script>
+    <script src="js/scenes/ch2_05_february.js?v=2"></script>
+    <script src="js/scenes/ch2_06_summer.js?v=2"></script>
+    <script src="js/scenes/ch2_07_interactive.js?v=2"></script>
+    <script src="js/album.js?v=2"></script>
+    <script src="js/progress.js?v=2"></script>
+    <script src="js/achievements.js?v=2"></script>
+    <script src="js/minigames.js?v=2"></script>
+    <script src="js/phone_data.js?v=2"></script>
+    <script src="js/phone.js?v=2"></script>
+    <script src="js/engine.js?v=2"></script>
+    <script>
+        initStartScreen();
+        // Самопроверка для разработки: index.html?check=1
+        if (new URLSearchParams(location.search).has('check')) {
+            const s = document.createElement('script');
+            s.src = 'js/dev-check.js?v=' + Date.now();
+            document.body.appendChild(s);
+        }
+    </script>
+</body>
+</html>

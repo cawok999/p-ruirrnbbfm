@@ -1,0 +1,239 @@
+/* Интерактив: карта Пангод, телефон Анжелы, мини-игры. Цвета — переменные из style.css */
+
+/* ===== ВХОД ПО ПАРОЛЮ ===== */
+#lock-screen {
+    position: fixed; inset: 0; z-index: 10000; display: flex;
+    align-items: center; justify-content: center; padding: 16px;
+    background: radial-gradient(circle at center, #2d0c36 0%, #0f0514 100%);
+}
+.lock-box {
+    width: 100%; max-width: 420px; text-align: center; background: rgba(255, 255, 255, 0.97);
+    border: 4px solid var(--pink-primary); border-radius: 28px; padding: 28px 22px;
+    box-shadow: 0 0 70px rgba(255, 20, 147, 0.6);
+}
+.lock-icon { font-size: 54px; }
+.lock-box h2 { color: var(--pink-primary); margin: 6px 0; font-size: 26px; }
+.lock-box p { color: #55445c; margin: 0 0 16px; }
+#lock-input {
+    width: 100%; padding: 14px 16px; font-size: 18px; font-family: inherit; text-align: center;
+    border: 3px solid #ffb6d9; border-radius: 16px; outline: none; color: var(--text-main);
+}
+#lock-input:focus { border-color: var(--pink-primary); }
+#lock-error { display: none; color: var(--danger-red); font-weight: 700; margin-top: 10px; font-size: 15px; }
+.lock-box .init-btn { width: 100%; margin-top: 16px; }
+
+/* ===== КАРТА ПАНГОД: выборы плиткой ===== */
+.choices.map-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.choices.map-grid .choice-btn { text-align: center; padding: 18px 10px; font-weight: 800; }
+.choices.map-grid .choice-btn.map-exit { grid-column: 1 / -1; }
+.choice-btn.done {
+    opacity: 0.55; cursor: default; border-style: dashed;
+    background: #f6f3f7; color: #8a7d92;
+}
+.choice-btn.minigame-btn {
+    text-align: center; font-size: 20px; font-weight: 900; color: #fff;
+    background: linear-gradient(135deg, var(--pink-primary), var(--accent-purple));
+    border-color: #fff; box-shadow: 0 8px 24px rgba(138, 43, 226, 0.35);
+}
+
+/* ===== ТЕЛЕФОН АНЖЕЛЫ ===== */
+#phone-btn {
+    position: fixed; bottom: 24px; left: 24px; z-index: 900; display: none;
+    width: 56px; height: 56px; border-radius: 50%; font-size: 26px;
+    align-items: center; justify-content: center; cursor: pointer;
+    background: linear-gradient(135deg, #2a1033, #4b1a5c); border: 2px solid var(--pink-light);
+    box-shadow: 0 8px 25px rgba(255, 20, 147, 0.45);
+}
+#phone-overlay {
+    position: fixed; inset: 0; z-index: 3500; display: none;
+    background: rgba(10, 3, 14, 0.75); backdrop-filter: blur(6px);
+    align-items: center; justify-content: center; padding: 12px;
+}
+#phone-device {
+    width: 100%; max-width: 390px; height: min(780px, 92dvh);
+    background: #111; border-radius: 38px; padding: 10px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.7), 0 0 0 2px #333, 0 0 40px rgba(255, 20, 147, 0.35);
+}
+#phone-screen {
+    width: 100%; height: 100%; border-radius: 30px; overflow: hidden;
+    background: #fff5f9; display: flex; flex-direction: column; color: var(--text-main);
+}
+.phone-status {
+    display: flex; justify-content: space-between; padding: 8px 20px 4px;
+    font-size: 13px; font-weight: 800; color: #555; flex-shrink: 0;
+}
+.phone-wallpaper {
+    flex: 1; overflow-y: auto; padding: 16px 18px;
+    background: linear-gradient(180deg, #2a0f35 0%, #6b1d5c 55%, #ff69b4 130%); color: #fff;
+}
+.phone-clock { font-size: 60px; font-weight: 300; text-align: center; margin-top: 10px; }
+.phone-date { text-align: center; opacity: 0.85; margin-bottom: 28px; }
+.phone-apps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px 10px; }
+.phone-app {
+    background: none; border: none; color: #fff; font-family: inherit; font-size: 12.5px; font-weight: 700;
+    display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; position: relative;
+}
+.phone-app-icon {
+    width: 62px; height: 62px; border-radius: 18px; font-size: 32px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255, 255, 255, 0.18); backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.phone-badge {
+    position: absolute; top: -6px; right: 4px; background: var(--pink-primary); color: #fff;
+    font-size: 11px; font-weight: 900; padding: 2px 6px; border-radius: 10px;
+}
+.phone-close {
+    margin: 0; border: none; padding: 16px; font-family: inherit; font-weight: 800; font-size: 15px;
+    background: #2a0f35; color: #ffb6d9; cursor: pointer; flex-shrink: 0;
+}
+.phone-header {
+    display: flex; align-items: center; gap: 8px; padding: 8px 12px; flex-shrink: 0;
+    border-bottom: 2px solid #ffd6e7; font-weight: 800; color: #b0106a;
+}
+.phone-header span { flex: 1; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.phone-back, .phone-x {
+    background: none; border: none; font-size: 26px; color: var(--pink-primary);
+    cursor: pointer; width: 36px; font-family: inherit; line-height: 1;
+}
+.phone-x { font-size: 18px; }
+.phone-body { flex: 1; overflow-y: auto; padding: 12px; -webkit-overflow-scrolling: touch; }
+.phone-hint, .phone-empty { text-align: center; color: #8a7d92; font-size: 13px; margin: 4px 0 12px; }
+.phone-contact {
+    display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+    background: #fff; border: 2px solid #ffe0ee; border-radius: 16px; padding: 10px 12px;
+    margin-bottom: 8px; font-family: inherit; cursor: pointer; color: inherit;
+}
+.phone-avatar {
+    width: 44px; height: 44px; border-radius: 50%; background: var(--pink-soft);
+    display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;
+}
+.phone-contact-text { display: flex; flex-direction: column; min-width: 0; }
+.phone-contact-text small { color: #8a7d92; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.phone-chat { display: flex; flex-direction: column; gap: 6px; background: #f6eef3; }
+.phone-msg {
+    max-width: 82%; padding: 8px 12px; border-radius: 16px; font-size: 14.5px; line-height: 1.4;
+    word-wrap: break-word; background: #fff; align-self: flex-start; border-top-left-radius: 4px;
+}
+.phone-msg.out {
+    align-self: flex-end; background: linear-gradient(135deg, var(--pink-primary), var(--pink-light));
+    color: #fff; border-radius: 16px; border-top-right-radius: 4px;
+}
+.phone-msg small { display: block; font-size: 10px; opacity: 0.65; text-align: right; }
+.phone-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+.phone-gallery img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; cursor: zoom-in; }
+.phone-note {
+    background: #fffbe6; border: 1px solid #f3e3a1; border-radius: 12px; padding: 12px 14px;
+    margin-bottom: 10px; font-size: 14.5px; line-height: 1.5; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+.phone-ach {
+    display: flex; align-items: center; gap: 12px; background: #fff; border: 2px solid #ffd6e7;
+    border-radius: 14px; padding: 10px 12px; margin-bottom: 8px;
+}
+.phone-ach span:last-child { display: flex; flex-direction: column; }
+.phone-ach small { color: #8a7d92; }
+.phone-ach.locked { background: #f6f3f7; border-style: dashed; border-color: #d9cfe0; color: #8a7d92; }
+.phone-ach-icon { font-size: 28px; }
+.album-card {
+    background: #fff; border: 2px solid #ffd6e7; border-radius: 16px; padding: 12px;
+    margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px;
+}
+.album-card img { width: 100%; border-radius: 10px; cursor: zoom-in; }
+.album-card.locked { background: #f6f3f7; border-style: dashed; border-color: #d9cfe0; color: #8a7d92; }
+.album-card.locked small { display: block; margin-top: 4px; }
+.album-date { font-size: 12px; color: var(--accent-purple); font-weight: 800; }
+.album-title { color: #b0106a; }
+.album-lines { display: flex; flex-direction: column; gap: 5px; background: #f6eef3; border-radius: 12px; padding: 8px; }
+.album-lines p { margin: 0; font-style: italic; }
+.phone-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.phone-list li {
+    padding: 12px 14px; line-height: 1.45; background: var(--pink-pale);
+    border: 2px solid #ffd6e7; border-radius: 14px;
+}
+.phone-list li.ending-locked { background: #f6f3f7; border: 2px dashed #d9cfe0; color: #8a7d92; }
+
+/* ===== МИНИ-ИГРЫ ===== */
+#minigame-overlay {
+    position: fixed; inset: 0; z-index: 3600; display: none;
+    background: rgba(10, 3, 14, 0.88); backdrop-filter: blur(8px);
+    align-items: center; justify-content: center; padding: 12px;
+}
+.mg-box {
+    width: 100%; max-width: 520px; max-height: 96dvh; background: #fff5f9;
+    border: 4px solid var(--pink-primary); border-radius: 24px; padding: 16px;
+    display: flex; flex-direction: column; gap: 10px; overflow-y: auto;
+    box-shadow: 0 0 60px rgba(255, 20, 147, 0.5);
+}
+.mg-title { text-align: center; font-size: 20px; font-weight: 900; color: var(--pink-primary); }
+.mg-stats { display: flex; justify-content: space-between; font-weight: 700; color: #6b4a76; font-size: 14px; }
+.mg-giveup {
+    background: none; border: none; color: #8a7d92; font-family: inherit; font-size: 14px;
+    text-decoration: underline; cursor: pointer; align-self: center;
+}
+.mg-result { text-align: center; padding: 10px 6px; }
+.mg-result-icon { font-size: 64px; }
+.mg-result h2 { color: var(--pink-primary); margin: 6px 0; }
+.mg-btn {
+    margin-top: 10px; width: 100%; padding: 16px; border: none; border-radius: 16px; cursor: pointer;
+    background: linear-gradient(135deg, var(--pink-primary), var(--pink-light)); color: #fff;
+    font-family: inherit; font-weight: 900; font-size: 18px;
+}
+
+/* Ритм-игра: три струны, ноты падают к линии */
+.rh-field {
+    position: relative; height: min(52dvh, 420px); border-radius: 16px; overflow: hidden;
+    background: linear-gradient(180deg, #1a0820 0%, #3a0f45 100%);
+    display: grid; grid-template-columns: repeat(3, 1fr);
+}
+.rh-lane { border-right: 1px solid rgba(255, 182, 217, 0.15); position: relative; }
+.rh-lane::after {
+    content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px;
+    background: rgba(255, 182, 217, 0.35); transform: translateX(-50%);
+}
+.rh-lane:nth-child(3) { border-right: none; }
+.rh-line {
+    position: absolute; left: 0; right: 0; bottom: 30px; height: 8px;
+    background: var(--pink-light); box-shadow: 0 0 18px var(--pink-primary); border-radius: 4px;
+}
+.rh-note {
+    position: absolute; top: 0; width: 46px; height: 18px; margin-top: -9px; border-radius: 10px;
+    background: linear-gradient(135deg, #fff, var(--pink-light)); box-shadow: 0 0 14px #ff69b4;
+    pointer-events: none; will-change: transform;
+}
+.rh-note.hit { background: #7dffb3; box-shadow: 0 0 20px #3dff8a; transition: opacity 0.25s; opacity: 0; }
+.rh-note.missed { background: #777; box-shadow: none; opacity: 0.5; }
+.rh-feedback {
+    position: absolute; top: 38%; left: 0; right: 0; text-align: center; pointer-events: none;
+    font-size: 28px; font-weight: 900; color: #fff; text-shadow: 0 0 12px var(--pink-primary);
+}
+.rh-feedback.show { animation: rhPop 0.35s ease; }
+.rh-feedback.perfect { color: #7dffb3; }
+.rh-feedback.miss { color: #ff8a9b; }
+@keyframes rhPop { from { transform: scale(1.4); } to { transform: scale(1); } }
+.rh-pads { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.rh-pad {
+    height: 74px; border-radius: 16px; border: 3px solid #fff; cursor: pointer;
+    background: linear-gradient(135deg, var(--pink-primary), var(--accent-purple));
+    color: #fff; font-family: inherit; font-size: 18px; font-weight: 900;
+    touch-action: manipulation; user-select: none; -webkit-user-select: none;
+}
+.rh-pad.pressed { transform: scale(0.94); filter: brightness(1.3); }
+
+/* Тест */
+.quiz-question { font-size: 19px; font-weight: 800; line-height: 1.4; padding: 6px 2px; }
+.quiz-answers { display: flex; flex-direction: column; gap: 10px; }
+.quiz-answer {
+    padding: 15px 16px; border-radius: 14px; border: 2px solid #ffb6d9; background: #fff;
+    font-family: inherit; font-size: 16px; text-align: left; cursor: pointer; color: inherit;
+}
+.quiz-answer.right { background: #d9ffe9; border-color: #3dbf75; }
+.quiz-answer.wrong { background: #ffe0e6; border-color: var(--danger-red); }
+
+/* ===== ТЕЛЕФОН (узкий экран) ===== */
+@media (max-width: 980px) {
+    #phone-btn { bottom: 16px; left: 16px; width: 50px; height: 50px; font-size: 23px; }
+    #phone-overlay { padding: 0; }
+    #phone-device { max-width: none; height: 100dvh; border-radius: 0; padding: 0; box-shadow: none; }
+    #phone-screen { border-radius: 0; }
+    .mg-box { padding: 12px; }
+}
